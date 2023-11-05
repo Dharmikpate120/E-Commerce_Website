@@ -1,24 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
-
+import "./App.css";
+import Home from "./components/Home";
+import Navbar from "./components/Navbar1";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProfilePage from "./components/ProfilePage";
+import Footer1 from "./components/Footer1";
+import PreviousOrder from "./components/PreviousOrder";
+import LikedItems from "./components/LikedItems";
+import Cart from "./components/Cart";
+import ProfileNavbar from "./components/ProfileNavbar";
+import Signin from "./components/Signin";
+import Signup from "./components/Signup";
+import ConfirmationPage from "./components/ConfirmationPage";
+import PaymentPage1 from "./components/PaymentPage1";
+import ContextProvider from "./components/ContextProvider";
+import UserDetails from "./components/UserDetails";
+import SellerForm from "./components/SellerForm";
+import FillUserInfo from "./components/FillUserInfo";
 function App() {
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <ContextProvider>
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/Signin" element={<Signin />} />
+            <Route path="/Signup" element={<Signup />} />
+            <Route path="/fillUserInfo" element={<FillUserInfo/>}/>
+
+            <Route path="/Profile" element={<ProfileNavbar />}>
+              <Route path="personalInformation" element={<ProfilePage />} />
+              <Route path="previousorders" element={<PreviousOrder />} />
+              <Route path="Sellerform" element={<SellerForm />} />
+            </Route>
+            <Route path="/userDetails" element={<UserDetails />} />
+
+            <Route path="/Favourites" element={<LikedItems />} />
+            <Route path="/Cart" element={<Cart />} />
+            <Route path="/confirmationPage" element={<ConfirmationPage />} />
+            <Route path="/paymentPage" element={<PaymentPage1 />} />
+          </Routes>
+          <Footer1 />
+        </BrowserRouter>
+      </ContextProvider>
+    </>
   );
 }
 

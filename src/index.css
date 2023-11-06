@@ -1,12 +1,10 @@
 body {
-  --main-background: #dcf0fa;
-  --dark-background: #2a324b;
-  --link-color: #50b4e2;
-  --button-color: #424f76;
-  --button-clicked: #b06a00;
-  --button-text: rgb(220, 236, 247);
-  --card-color: #4061c4;
-  --description-color: ;
+  --main-background: #ffffff;
+  --dark-background: #292929;
+  --card-color: #292929;
+  --button-clicked: #464646;
+  --button-text: rgb(240, 240, 240);
+  --text-color-1: rgb(246, 246, 246);
   background-color: var(--main-background);
   padding: 0;
   margin: 0;
@@ -39,7 +37,7 @@ body * {
   min-width: 100vw;
   max-width: 100%;
   background-color: var(--dark-background);
-  color: var(--link-color);
+  color: var(--button-text);
 }
 
 .NavbarMain * {
@@ -48,7 +46,7 @@ body * {
 .NavbarMain .title {
   margin-left: 20px;
   font-size: 30px;
-  color: var(--link-color);
+  color: var(--button-text);
 }
 
 .searchbar {
@@ -58,7 +56,7 @@ body * {
   padding: 1.5px 1.5px 2px 1.5px;
 }
 .searchbar * {
-  color: var(--link-color);
+  color: var(--button-text);
 }
 .searchbar_text {
   padding-left: 10px;
@@ -85,7 +83,7 @@ body * {
 .searchicon {
   height: 100%;
   width: 30px;
-  color: var(--button-color);
+  color: var(--dark-background);
   display: flex;
   align-items: center;
   justify-content: left;
@@ -102,7 +100,7 @@ body * {
 .navigation a {
   font-size: 20px;
   text-decoration: none;
-  color: var(--link-color);
+  color: var(--button-text);
 }
 .profile {
   position: relative;
@@ -181,13 +179,12 @@ body * {
 }
 .signinTitle {
   position: relative;
-  color: var(--dark-background);
+  color: var(--text-color-1);
   height: 13%;
   width: 100%;
   font-weight: 700;
   font-size: 30px;
   margin-bottom: 25px;
-  color: var(--dark-background);
 }
 .signinTitle::after {
   content: "";
@@ -209,7 +206,7 @@ body * {
   padding: 3px 0;
   font-size: 20px;
   font-weight: 700;
-  color: var(--dark-background);
+  color: var(--text-color-1);
 }
 .input input {
   height: 30px;
@@ -227,7 +224,7 @@ body * {
   justify-content: center;
 }
 .SigninButton {
-  background-color: var(--button-color);
+  background-color: var(--dark-background);
   padding: 5px 10px;
   font-size: 25px;
   min-width: 70%;
@@ -259,7 +256,90 @@ body * {
 .cardscroll::-webkit-scrollbar {
   display: none;
 }
+
+.homeMain {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.discounts{
+  width:100%;
+  height:550px;
+  border:2px solid black;
+  display:flex;
+  justify-content:center;
+  align-items:center; 
+}
+.discount{
+  height:100%;
+  width:80%;  
+
+}
+.discount > img{
+  height:100%;
+  width:100%;
+}
+.categories {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.categories > div {
+  position: relative;
+  height: 200px;
+  width: 300px;
+  margin: 10px;
+  /* border: 2px solid black; */
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0px 0 7px -3px #000;
+}
+.categories > div:hover {
+  .categoryImage {
+    filter: blur(3px);
+    height:204px;
+    width:306px;
+    top:-2px;
+    left:-3px;
+  }
+  .categoryTitle {
+    font-size:35px;
+  }
+}
+.categories > div > img {
+  filter: blur(0px);
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  border-radius: 10px;
+  transition: all linear 0.1s;
+}
+.categoryTitle {
+  display: flex;
+  font-size: 0px;
+  font-weight: 700;
+  color: var(--text-color-1);
+  text-shadow: 0 1px 3px #000;
+  transition: all linear 0.1s;
+}
+.products {
+  width: 80%;
+}
+.products > .title {
+  width: 80%;
+  display: flex;
+  justify-content: left;
+}
+
 .cards {
+  width: 100%;
   position: relative;
   display: flex;
   align-items: center;
@@ -290,18 +370,28 @@ body * {
 }
 .cardMain {
   position: relative;
-  height: 250px;
-  box-shadow: 0.5px 0px 10px -3px black;
-
-  scroll-snap-align: center;
+  height: 280px;
+  display: flex;
+  justify-content: center;
+  overflow: visible;
+  align-items: top;
   margin: 0 20px 0 20px;
-  min-width: 400px;
+  width: 180px;
   border-radius: 10px;
+  background: transparent;
+}
+.cardInternal {
+  position: relative;
   background-color: var(--card-color);
+  height: 90%;
+  border-bottom: 2px solid white;
+  border-radius: 5px;
+  width: 100%;
+  z-index: 1;
 }
 
 .cardMain * {
-  color: var(--button-text);
+  color: var(--text-color-1);
 }
 
 .likeButton {
@@ -317,8 +407,9 @@ body * {
   background-color: rgba(255, 255, 255, 0.435);
 }
 .likeButton > * {
-  color: var(--button-color);
+  color: var(--text-color-1);
 }
+
 .notliked {
   font-size: 20px;
 }
@@ -337,41 +428,58 @@ body * {
 
 .cardMain .images {
   height: 60%;
-  max-width: 100%;
-  margin-top: 2%;
+  width: 100%;
+  margin-top: 10px;
   display: flex;
-
+  justify-content: center;
   align-items: center;
-  overflow-x: scroll;
-  scroll-snap-type: x mandatory;
+}
 
-  /* disappear scrollbar  */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-/* disappear scrollbar  */
-.images::-webkit-scrollbar {
-  display: none;
-}
-.images .productImage {
-  margin-left: 10px;
-  margin-right: 10px;
-  height: 130px;
-  min-width: 250px;
-  border: 2px dotted white;
-  scroll-snap-align: none center;
-}
 .titleAndPrice {
   padding-left: 20px;
   padding-right: 20px;
   display: flex;
   justify-content: space-between;
 }
-.titleAndPrice * {
-  font-size: 19px;
-  font-weight: bold;
-  color: var(--button-text);
+.cardtitle {
+  color: var(--text-color-1);
+  margin-left: 10px;
+  font-size: 1.1rem;
+  text-decoration: underline;
 }
+.cardprice {
+  /* position: absolute;
+  bottom: 10px;
+  right: 10px; */
+  color: var(--text-color-1);
+  margin-left: 10px;
+  font-size: 17px;
+}
+.cardcategory {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  margin-left: 10px;
+  font-size: 12px;
+}
+.cardbottom {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--dark-background);
+}
+.cardrating {
+  /* position: absolute;
+  left: 10px;
+  bottom: 10px; */
+  font-size: 17px;
+}
+
 .description {
   height: 40px;
   width: 70%;
@@ -382,17 +490,25 @@ body * {
 
 .cartButton {
   position: absolute;
-  bottom: 0px;
+  bottom: 10%;
   border-radius: 0 0 10px 10px;
-  font-size: 25px;
+  font-size: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  height: 35px;
+  height: 11%;
   width: 100%;
   color: var(--button-text);
-  background-color: var(--button-color);
+  background-color: var(--dark-background);
+  transition: all linear 0.3s;
+  transform: 20px;
+  cursor: pointer;
+}
+.cardMain:hover {
+  height: 280px;
+  .cartButton {
+    bottom: 0px;
+  }
 }
 
 .cartButton:active {
@@ -526,11 +642,11 @@ body * {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--button-color);
+  background-color: var(--dark-background);
 }
 .linker {
   text-decoration: none;
-  color: var(--link-color);
+  color: var(--button-text);
 }
 .OrdersMain {
   padding: 5px;
@@ -588,9 +704,11 @@ body * {
 }
 .productImage {
   height: 150px;
-  width: 200px;
-  margin: 10px 0;
-  background-color: white;
+  width: 150px;
+  margin: 7px;
+  border-radius: 5px;
+
+  /* background-color: white; */
 }
 .information {
   width: 700px;
@@ -617,7 +735,7 @@ body * {
 .addCart {
   height: 40px;
   width: 50%;
-  background-color: var(--button-color);
+  background-color: var(--dark-background);
   margin: 0 5px;
   display: flex;
   justify-content: center;
@@ -629,7 +747,7 @@ body * {
 .addFavourites {
   height: 40px;
   width: 50%;
-  background-color: var(--button-color);
+  background-color: var(--dark-background);
   margin: 0 5px;
   display: flex;
   justify-content: center;
@@ -755,7 +873,7 @@ body * {
 }
 
 .proceedBtn {
-  background-color: var(--button-color);
+  background-color: var(--dark-background);
   height: 50px;
   width: 30%;
   border-radius: 10px;
@@ -844,7 +962,7 @@ body * {
   border: 2px solid var(--dark-background);
   border-radius: 7px;
   padding: 5px 10px;
-  background-color: var(--link-color);
+  background-color: var(--button-text);
 }
 .header > * {
   display: flex;
@@ -895,7 +1013,7 @@ body * {
   padding: 3px 10px;
   border: 2px solid var(--dark-background);
   border-radius: 7px;
-  background-color: var(--link-color);
+  background-color: var(--button-text);
 }
 .notice {
   text-align: right;

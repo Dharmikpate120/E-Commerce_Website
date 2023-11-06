@@ -115,7 +115,7 @@ router.post("/fetchProductsId", upload.none(), async (req, res) => {
 });
 router.post("/addToCart", fetchUser, async (req, res) => {
   const auth_id = req.auth_id;
-  const product_id = Number(req.body.product_id);
+  const product_id = req.body.product_id;
   const productIdArray = [];
   const productCountArray = [];
   var variableString = "";
@@ -126,25 +126,28 @@ router.post("/addToCart", fetchUser, async (req, res) => {
       const value = result[0].product_id.split(";");
       value.forEach((element1) => {
         const value1 = element1.split("x");
-
-        productIdArray.push((value1[0]));
-        productCountArray.push((value1[1]));
+        // console.log(value1[0]);
+        // console.log(value1[1]);
+        productIdArray.push(value1[0]);
+        productCountArray.push(value1[1]);
       });
-      const index = productIdArray.indexOf(product_id);
+      const index = productIdArray.indexOf(`${product_id}`);
+
+      console.log(index);
       productIdArray.pop();
       productCountArray.pop();
       if (index < 0) {
-        console.log(productIdArray);
         productIdArray.push(product_id);
-        productCountArray.push(1);
-        console.log(productIdArray);
+        productCountArray.push("1");
+        // console.log(productIdArray);
       } else {
-        productCountArray[index] = productCountArray[index] + 1;
+        productCountArray[index] = parseInt(productCountArray[index]) + 1;
       }
-     
+
       for (var i = 0; i < productIdArray.length; i++) {
         variableString =
-          variableString + `${parseInt(productIdArray[i])}x${parseInt(productCountArray[i])};`;
+          variableString +
+          `${parseInt(productIdArray[i])}x${parseInt(productCountArray[i])};`;
       }
 
       console.log(variableString);

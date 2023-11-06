@@ -8,9 +8,6 @@ const Productcard = (props) => {
       <div className="cards">
         {/* left arrow start */}
         <div className="coverLeft">
-          <div className="moveLeft">
-            <i className="fa-solid fa-arrow-left"></i>
-          </div>
         </div>
 
         <div className="cardscroll">
@@ -19,9 +16,6 @@ const Productcard = (props) => {
           })}
         </div>
         <div className="coverRight">
-          <div className="moveRight">
-            <i className="fa-solid fa-arrow-right"></i>
-          </div>
         </div>
       </div>
     </>

@@ -9,7 +9,7 @@ const Home = () => {
   const electronic = [];
   const furniture = [];
   const [loader, setloader] = useState(false);
-  
+
   useEffect(() => {
     setloader(true);
     fetchProducts().then((results) => {
@@ -36,11 +36,57 @@ const Home = () => {
   }
   return (
     <div className="homeMain">
-      <div className="category">electronic</div>
-      <Productcard products={electronic} />
-
-      <div className="category">furniture</div>
-      <Productcard products={furniture} />
+      <div className="discounts">
+        <div className="discount">
+          <img
+            src="http://localhost:5000/images/Sale_discounts.jpg"
+            alt=""
+          />
+        </div>
+      </div>
+      <div className="title">Categories:</div>
+      <div className="categories">
+        <div className="electronics">
+          <p className="categoryTitle">Electronics</p>
+          <img
+            className="categoryImage"
+            src="	http://localhost:5000/images/electronics_category.png"
+            alt=""
+          />
+        </div>
+        <div className="furnitures">
+          <p className="categoryTitle">Furnitures</p>
+          <img
+            className="categoryImage"
+            src="	http://localhost:5000/images/Furniture_category.jpg"
+            alt=""
+          />
+        </div>
+        <div className="Mens">
+          <p className="categoryTitle">Men's</p>
+          <img
+            className="categoryImage"
+            src="	http://localhost:5000/images/Mens_category.jpg"
+            alt=""
+          />
+        </div>
+        <div className="Women's">
+          <p className="categoryTitle">Women's</p>
+          <img
+            className="categoryImage"
+            src="	http://localhost:5000/images/Womens_category.jpg"
+            alt=""
+          />
+        </div>
+      </div>
+      <div className="products">
+        <div className="title">Electronics:</div>
+        <Productcard products={electronic} />
+      </div>
+      <div className="products">
+        <div className="title">Furnitures:</div>
+        <Productcard products={furniture} />
+      </div>
     </div>
   );
 };

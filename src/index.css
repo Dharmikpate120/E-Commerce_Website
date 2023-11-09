@@ -1,10 +1,13 @@
 body {
-  --main-background: #ffffff;
-  --dark-background: #292929;
-  --card-color: #292929;
+  --six-color: #292929;
+  --three-color: #6c6c6c;
+  --one-color: #;
+  --main-background: #b6ad90;
+  --dark-background: #7f4f24;
+  --card-color: #7f4f24;
   --button-clicked: #464646;
-  --button-text: rgb(240, 240, 240);
-  --text-color-1: rgb(246, 246, 246);
+  --button-text: #000;
+  --text-color-1: #000;
   background-color: var(--main-background);
   padding: 0;
   margin: 0;
@@ -26,9 +29,11 @@ body * {
   position: relative;
 }
 .NavbarMain {
+  position: relative;
   z-index: 9999;
   position: fixed;
   top: 0;
+  height: 45px;
   left: 0;
   display: flex;
   justify-content: space-between;
@@ -38,6 +43,14 @@ body * {
   max-width: 100%;
   background-color: var(--dark-background);
   color: var(--button-text);
+}
+.NavbarMain::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background-color: var(--main-background);
 }
 
 .NavbarMain * {
@@ -140,18 +153,44 @@ body * {
 .profileInner:hover {
   display: flex;
 }
+
+.footermain {
+  position: relative;
+  height: 500px;
+  width: 100%;
+  background-color: var(--dark-background);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0 12%;
+  padding-top: 20px;
+}
+.footermain::after {
+  content: "";
+  position: absolute;
+  height: 1px;
+  width: 95%;
+  background-color: var(--card-color);
+  top: 0;
+}
+.footermain > div {
+  height: 100%;
+  width: 20%;
+  margin: 0 1%;
+}
+
 .Alert {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 40px;
-  background-color: rgba(152, 203, 152, 0.675);
-  color: rgb(34, 172, 0);
+
+  background-color: rgba(201, 82, 82, 0.675);
+  color: rgb(172, 0, 0);
   display: flex;
   justify-content: left;
   align-items: center;
-  padding: 0 10px;
+  padding: 10px 10px;
   font-size: 18px;
 }
 .Alert::after {
@@ -161,7 +200,7 @@ body * {
   left: 0;
   width: 100%;
   height: 0.1rem;
-  background-color: rgb(47, 171, 47);
+  background-color: rgb(205, 0, 0);
 }
 .signinMain {
   position: relative;
@@ -263,22 +302,21 @@ body * {
   align-items: center;
   flex-direction: column;
 }
-.discounts{
-  width:100%;
-  height:550px;
-  border:2px solid black;
-  display:flex;
-  justify-content:center;
-  align-items:center; 
+.discounts {
+  width: 100%;
+  height: 550px;
+  border: 2px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.discount{
-  height:100%;
-  width:80%;  
-
+.discount {
+  height: 100%;
+  width: 80%;
 }
-.discount > img{
-  height:100%;
-  width:100%;
+.discount > img {
+  height: 100%;
+  width: 100%;
 }
 .categories {
   display: flex;
@@ -301,13 +339,13 @@ body * {
 .categories > div:hover {
   .categoryImage {
     filter: blur(3px);
-    height:204px;
-    width:306px;
-    top:-2px;
-    left:-3px;
+    height: 204px;
+    width: 306px;
+    top: -2px;
+    left: -3px;
   }
   .categoryTitle {
-    font-size:35px;
+    font-size: 35px;
   }
 }
 .categories > div > img {
@@ -471,7 +509,7 @@ body * {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--dark-background);
+  background-color: var(--card-color);
 }
 .cardrating {
   /* position: absolute;
@@ -499,7 +537,7 @@ body * {
   height: 11%;
   width: 100%;
   color: var(--button-text);
-  background-color: var(--dark-background);
+  background-color: var(--card-color);
   transition: all linear 0.3s;
   transform: 20px;
   cursor: pointer;
@@ -553,13 +591,16 @@ body * {
   font-weight: bold;
   background-color: var(--dark-background);
   width: 50px;
-  transition: all linear 0.1s;
+  transition: all linear 0.2s;
   display: flex;
   justify-content: flex-start;
   align-items: left;
 }
 .profileNavigation:hover {
-  width: 14%;
+  width: 200px;
+  .opener {
+    display: none;
+  }
   .navigator {
     display: inline;
   }
@@ -570,6 +611,7 @@ body * {
 .profileNavigation .buttons {
   padding: 1% 5%;
   margin: 5px 0 5px 0;
+  width: 200px;
 }
 
 .profileNavigation hr {
@@ -1073,7 +1115,7 @@ body * {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 20px;
+  margin: 30px 0;
 }
 .sellerform {
   width: 70%;
@@ -1081,6 +1123,32 @@ body * {
 .sellerform > .title {
   text-align: left;
   margin: 5px 0;
+}
+
+.sellerButton {
+  margin: 10px 0;
+
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sellerButton > a {
+  height: 100%;
+  width: 40%;
+  border: 2px solid var(--dark-background);
+  border-radius: 7px;
+  background-color: var(--card-color);
+  font-size: 20px;
+  font-weight: 700;
+  text-align:center;
+  text-decoration:none;
+  color:black;
+  padding:2px 0;
+}
+.sellerButton > button:active {
+  position: relative;
+  top: 1px;
 }
 
 .UserInfoMain {
@@ -1121,4 +1189,53 @@ body * {
 .Buttons {
   display: flex;
   justify-content: space-evenly;
+}
+
+.sellerProfileMain {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  
+}
+.sellerProfileMain > .title {
+  width: 65%;
+  text-align: left;
+}
+
+.sellerInternal {
+  width: 65%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction:column;
+  margin-bottom:30px;
+}
+.logoMain > img {
+  border: 3px solid var(--dark-background);
+  border-radius: 50%;
+  padding:3px;
+  height: 300px;
+  width: 300px;
+  border-radius: 50%;
+}
+
+.sellerInternal > .title{
+  width: 100%;
+  text-align:left;
+}
+
+.sellerInternal > .value{
+  width:100%;
+  background-color:white;
+  border-radius:7px;
+  border:2px solid var(--dark-background);
+  height:35px;
+  font-size:20px;
+  padding-left:5px;
+}
+
+.sellerInternal> .value:after{
+  background-color:var(--dark-background);
 }

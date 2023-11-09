@@ -15,7 +15,6 @@ const ProfilePage = () => {
       setUserDetails(results);
     });
   },[]);
-  console.log(UserDetails);
   return (
     UserDetails && (
       <>

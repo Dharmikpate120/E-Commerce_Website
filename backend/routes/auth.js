@@ -12,7 +12,6 @@ router.post("/signup", async (req, res) => {
   let password = req.body.password;
   password = await bcrypt.hash(password, salt);
   const email = req.body.email;
-  const seller = req.body.seller;
   const id = Date.now();
 
   //checking if the entered email already exist in the database
@@ -80,6 +79,7 @@ router.post("/signin", async (req, res) => {
     }
   });
 });
+
 
 
 module.exports = router;

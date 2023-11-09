@@ -3,7 +3,6 @@ import Home from "./components/Home";
 import Navbar from "./components/Navbar1";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ProfilePage from "./components/ProfilePage";
-import Footer1 from "./components/Footer1";
 import PreviousOrder from "./components/PreviousOrder";
 import LikedItems from "./components/LikedItems";
 import Cart from "./components/Cart";
@@ -16,6 +15,8 @@ import ContextProvider from "./components/ContextProvider";
 import UserDetails from "./components/UserDetails";
 import SellerForm from "./components/SellerForm";
 import FillUserInfo from "./components/FillUserInfo";
+import Footer from "./components/Footer";
+import SellerProfile from "./components/SellerProfile";
 function App() {
   
   return (
@@ -31,6 +32,7 @@ function App() {
 
             <Route path="/Profile" element={<ProfileNavbar />}>
               <Route path="personalInformation" element={<ProfilePage />} />
+              <Route path="SellerInformation" element={<SellerProfile />} />
               <Route path="previousorders" element={<PreviousOrder />} />
               <Route path="Sellerform" element={<SellerForm />} />
             </Route>
@@ -41,7 +43,7 @@ function App() {
             <Route path="/confirmationPage" element={<ConfirmationPage />} />
             <Route path="/paymentPage" element={<PaymentPage1 />} />
           </Routes>
-          <Footer1 />
+          <Footer />
         </BrowserRouter>
       </ContextProvider>
     </>

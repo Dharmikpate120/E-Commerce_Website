@@ -8,7 +8,8 @@ const cors = require("cors");
 
 const app = express();
 app.use(cors());
-app.use("/images", express.static(__dirname + "/images"));
+app.use("/images", express.static(__dirname + "/profile_images"));
+app.use("/seller_logo", express.static(__dirname + "/seller_logo"));
 
 app.use(
   express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 })

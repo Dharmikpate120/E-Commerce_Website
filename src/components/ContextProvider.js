@@ -26,8 +26,9 @@ const ContextProvider = (props) => {
 
       fetchUserCookie();
       homeRef.current.click();
+      return;
     } else {
-      console.log(user1.error);
+      return user1.error;
     }
   };
 
@@ -140,18 +141,6 @@ const ContextProvider = (props) => {
     console.log(item1);
     return item;
   };
-  // const fetchCart = async () => {
-  //   const item = await fetch(`${host}/userdata/fetchCart`, {
-  //     method: "POST",
-  //     headers: {
-  //       auth_token: userCookie.current,
-  //     },
-  //   });
-  //   const item1 = await item.json();
-  //   console.log(userCookie);
-  // };
-  // fetchCart();
-
   const fetchCartItems = async () => {
     var productIdArray = [];
     var productCountArray = [];
@@ -179,8 +168,7 @@ const ContextProvider = (props) => {
     var products = "";
     var item1 = [];
     const ItemIndex = await fetchCartItems();
-    // console.log(ItemIndex[0]);
-    // console.log(ItemIndex[1]);
+
     ItemIndex[0].forEach((element) => {
       products = products + `${element};`;
     });
@@ -197,11 +185,37 @@ const ContextProvider = (props) => {
           item1.push({ ...element1, count: ItemIndex[1][i] });
         }
       });
-      // console.log(ItemIndex[1][i]);
     });
-    
-    // console.log(item1);
+
     return item1;
+  };
+
+  const registerSellerDetails = async (sellerData, sellerLogo) => {
+    const body = new FormData();
+
+    body.append("FirmName", sellerData.FirmName);
+    body.append("FirmAddress", sellerData.FirmAddress);
+    body.append("FirmPhone", sellerData.FirmPhone);
+    body.append("FirmEmail", sellerData.FirmEmail);
+    body.append("GSTNO", sellerData.GSTNO);
+    body.append("sellerLogo", sellerLogo);
+
+    const response = await fetch(`${host}/userdata/registerSeller`, {
+      method: "POST",
+      headers: { auth_token: userCookie.current },
+      body: body,
+    });
+    console.log(response);
+  };
+
+  const fetchSellerData = async () => {
+    const response = await fetch(`${host}/userdata/fetchSellerData`, {
+      method: "POST",
+      headers: { auth_token: userCookie.current },
+    });
+    const response1 = await response.json();
+
+    return response1;
   };
   return (
     <apiContext.Provider
@@ -219,6 +233,8 @@ const ContextProvider = (props) => {
         addToCart,
         fetchCartItems,
         fetchProductsById,
+        registerSellerDetails,
+        fetchSellerData
       }}
     >
       {props.children}

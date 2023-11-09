@@ -22,6 +22,10 @@ const ProfileNavbar = () => {
             <div className="buttons">Personal Information</div>
           </NavLink>
           <hr />
+          <NavLink className="linker" to="/Profile/SellerInformation">
+            <div className="buttons">Firm Information</div>
+          </NavLink>
+          <hr />
           <NavLink className="linker" to="/Profile/previousorders">
             <div className="buttons">previous orders</div>
           </NavLink>
@@ -31,7 +35,9 @@ const ProfileNavbar = () => {
           </NavLink>
           <hr />
           <NavLink className="linker" to="/Signin">
-            <div className="buttons" onClick={signout}>Signout</div>
+            <div className="buttons" onClick={signout}>
+              Signout
+            </div>
           </NavLink>
         </div>
       </div>

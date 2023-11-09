@@ -3,7 +3,8 @@ import { apiContext } from "../context/apiContext";
 import { NavLink } from "react-router-dom";
 
 const SellerForm = () => {
-  const { userCookie, signinRef, registersellerdetails } = useContext(apiContext);
+  const { userCookie, signinRef, registerSellerDetails } =
+    useContext(apiContext);
   const [sellerLogo, setsellerLogo] = useState();
   const [sellerData, setsellerData] = useState({
     FirmName: "",
@@ -33,7 +34,7 @@ const SellerForm = () => {
       alert("all field are necessary!");
       return;
     }
-    await registersellerdetails(sellerData, sellerLogo);
+    await registerSellerDetails(sellerData, sellerLogo);
     console.log("done");
   };
 

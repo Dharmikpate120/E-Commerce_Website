@@ -17,6 +17,7 @@ import SellerForm from "./components/SellerForm";
 import FillUserInfo from "./components/FillUserInfo";
 import Footer from "./components/Footer";
 import SellerProfile from "./components/SellerProfile";
+import AddProducts from "./components/AddProducts";
 function App() {
   
   return (
@@ -42,6 +43,8 @@ function App() {
             <Route path="/Cart" element={<Cart />} />
             <Route path="/confirmationPage" element={<ConfirmationPage />} />
             <Route path="/paymentPage" element={<PaymentPage1 />} />
+            <Route path="/addNewProduct" element={<AddProducts />} />
+
           </Routes>
           <Footer />
         </BrowserRouter>

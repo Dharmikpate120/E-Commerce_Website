@@ -33,7 +33,7 @@ const ProfilePage = () => {
             <div className="profilepic">
               <div className="image">
                 <img
-                  src={"http://localhost:5000/images/"+UserDetails.profileImage}
+                  src={"http://localhost:5000/profile_images/"+UserDetails.profileImage}
                   alt="Profile"
                 />
               </div>

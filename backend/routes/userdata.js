@@ -205,15 +205,13 @@ router.post(
       console.log(result);
       console.log(result.length);
 
-
-      if (result.length>0) {
+      if (result.length > 0) {
         const query1 = `UPDATE \`seller_data\` SET \`firm_name\`='${FirmName}',\`firm_address\`='${FirmAddress}',\`firm_phone\`='${FirmPhone}',\`firm_email\`='${FirmEmail}',\`firm_logo\`='${LogoName}',\`GSTNO\`='${GSTNo}' WHERE seller_id=${result[0].seller_id}`;
-        connection.query(query1,(err, result)=>{
-          if(err) throw err;
+        connection.query(query1, (err, result) => {
+          if (err) throw err;
           console.log(result);
           res.send("done1");
-        }
-        )
+        });
       } else {
         const query = `INSERT INTO \`seller_data\`(\`firm_name\`, \`firm_address\`, \`firm_phone\`, \`firm_email\`, \`firm_logo\`, \`GSTNO\`, \`auth_id\`, \`seller_id\`) VALUES ('${FirmName}','${FirmAddress}','${FirmPhone}','${FirmEmail}','${LogoName}','${GSTNo}','${auth_id}','${seller_id}')`;
         connection.query(query, (err, result) => {
@@ -223,19 +221,84 @@ router.post(
         });
       }
     });
-
   }
 );
-router.post("/fetchSellerData",fetchUser,(req,res)=>{
+router.post("/fetchSellerData", fetchUser, (req, res) => {
   const auth_id = req.auth_id;
   const query = `SELECT \`firm_name\`, \`firm_address\`, \`firm_phone\`, \`firm_email\`, \`firm_logo\`, \`GSTNO\` FROM \`seller_data\` WHERE auth_id = ${auth_id}`;
 
-  connection.query(query,(err,result)=>{
-    if(err) throw err;
-    console.log(result[0]);
-    res.json(result[0]);
-  })
+  connection.query(query, (err, result) => {
+    if (err) throw err;
+    if (result[0]) {
+      console.log("hello");
+      console.log(result[0]);
+      res.json(result[0]);
+    } else {
+      console.log("hello");
+      res.json({
+        error: "Your are not a seller, Setup Your seller Account Now!",
+      });
+    }
+  });
+});
 
-})
+const productStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./backend/products_images");
+  },
+  filename: (req, file, cb) => {
+    const originalname = file.originalname.split(".");
+
+    cb(
+      null,
+      `${Date.now()}_${Math.floor(Math.random() * 10000000000)}.${
+        originalname[originalname.length - 1]
+      }`
+    );
+  },
+});
+
+const productUpload = multer({ storage: productStorage });
+
+router.post(
+  "/insertProduct",
+  fetchUser,
+  productUpload.array("productImages"),
+  async (req, res) => {
+    const auth_id = req.auth_id;
+    var seller_id = 0;
+    const Name = req.body.Name;
+    const Category = req.body.Category;
+    const Description = req.body.Description;
+    const Price = req.body.Price;
+    const Product_id = Date.now();
+    var image = "";
+    console.log(req.files)
+    for (var i = 0; i < req.files.length; i++) {
+      image = image + req.files[i].filename + ";";
+    }
+    console.log(image);
+    const query0 = `SELECT \`seller_id\` FROM \`seller_data\` WHERE auth_id=${auth_id}`;
+    console.log(auth_id);
+    connection.query(query0, (err, result) => {
+      if (err) console.log(err);
+      if (result.length > 0) {
+        seller_id = parseInt(result[0].seller_id);
+        const query = `INSERT INTO \`products\`(\`seller_id\`, \`product_id\`, \`name\`, \`category\`, \`image\`, \`description\`, \`price\`, \`rating\`) VALUES ('${seller_id}','${Product_id}','${Name}','${Category}','${image} ','${Description}','${Price}','4.5')`;
+        // console.log(query);
+        connection.query(query, (err, result) => {
+          if (err) throw err;
+          // console.log(result);
+          res.send(result);
+        });
+      }
+      else{
+        res.send(result.length);
+      }
+    });
+  }
+);
 
 module.exports = router;
+
+// git commit -m "Added FrontEnd(SellerForm,SellerDetails), Backend(registerSeller,fetchSellerData) "

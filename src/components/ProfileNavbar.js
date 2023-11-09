@@ -1,14 +1,21 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { apiContext } from "../context/apiContext";
 
 const ProfileNavbar = () => {
-  const { fetchUserCookie, userCookie } = useContext(apiContext);
-  const signout = ()=>{
+  const { fetchUserCookie, userCookie, fetchSellerData, sellerData,setsellerData } =
+    useContext(apiContext);
+  const signout = () => {
     document.cookie = "user=;path=/";
     fetchUserCookie();
     console.log(userCookie);
-  }
+  };
+  useEffect(() => {
+    return async () => {
+      setsellerData(await fetchSellerData());
+    };
+  }, []);
+
   return (
     <div className="ProfileMain">
       <div className="profileNavigation">

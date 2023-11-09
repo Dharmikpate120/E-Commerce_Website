@@ -12,7 +12,12 @@ const Productcard = (props) => {
 
         <div className="cardscroll">
           {products.map((element, i) => {
-            return <Card productDetails={element} key={i} />;
+            return (<>
+              
+            <Card productDetails={element} key={i} />
+            <Card productDetails={element} key={i} />
+            </>
+            );
           })}
         </div>
         <div className="coverRight">

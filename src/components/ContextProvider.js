@@ -1,7 +1,8 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { apiContext } from "../context/apiContext";
 
 const ContextProvider = (props) => {
+  const [sellerData, setsellerData] = useState({});
   const host = "http://localhost:5000";
   const signinRef = useRef(null);
   const homeRef = useRef(null);
@@ -213,10 +214,29 @@ const ContextProvider = (props) => {
       method: "POST",
       headers: { auth_token: userCookie.current },
     });
-    const response1 = await response.json();
 
+    const response1 = await response.json();
     return response1;
   };
+  const insertProduct = async (ProductDetails, ProductImages)=>{
+    const body = new FormData();
+    ProductImages.forEach(element => {
+      
+      body.append("productImages",element);
+    });
+    body.append("Name", ProductDetails.Name);
+    body.append("Category", ProductDetails.Category);
+    body.append("Description", ProductDetails.Description);
+    body.append("Price", ProductDetails.Price);
+
+
+    const response = await fetch(`${host}/userdata/insertProduct`, {
+      method: "POST",
+      headers: { auth_token: userCookie.current },
+      body:body,
+    });
+    console.log(response);
+  }
   return (
     <apiContext.Provider
       value={{
@@ -234,7 +254,10 @@ const ContextProvider = (props) => {
         fetchCartItems,
         fetchProductsById,
         registerSellerDetails,
-        fetchSellerData
+        fetchSellerData,
+        sellerData,
+        setsellerData,
+        insertProduct,
       }}
     >
       {props.children}

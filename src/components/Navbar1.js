@@ -1,26 +1,21 @@
 import React, { useContext, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { apiContext } from "../context/apiContext";
 
 function Navbar() {
-  const { signinRef, homeRef, fetchUserCookie, fetchUserDetails } =
-    useContext(apiContext);
-
+  const { signinRef, homeRef, fetchUserCookie } = useContext(apiContext);
+  const location = useLocation();
   useEffect(() => {
     const searchbar = document.querySelector(".search");
     searchbar.addEventListener("submit", (e) => {
       e.preventDefault();
     });
-    const NavbarMain = document.querySelector(".NavbarMain");
-    const navpadding = document.querySelector(".navpadding");
-    navpadding.style.setProperty("height", `${NavbarMain.clientHeight}px`);
-    window.addEventListener("resize", () => {
-      navpadding.style.setProperty("height", `${NavbarMain.clientHeight}px`);
-    });
     fetchUserCookie();
   }, [fetchUserCookie]);
-  // fetchUserDetails();
 
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [location, location.pathname]);
   return (
     <>
       <div className="NavbarMain">
@@ -28,7 +23,12 @@ function Navbar() {
         <NavLink to="/" ref={homeRef} className="title">
           ecommerce web
         </NavLink>
-        <form className="search">
+        <form
+          className="search"
+          onClick={() => {
+            homeRef.current.click();
+          }}
+        >
           <div className="searchbar">
             <input
               className="searchbar_text"
@@ -62,7 +62,6 @@ function Navbar() {
           </NavLink>
         </div>
       </div>
-      <div className="navpadding"></div>
     </>
   );
 }

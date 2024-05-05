@@ -3,7 +3,7 @@ import { apiContext } from "../context/apiContext";
 import { NavLink } from "react-router-dom";
 
 const SellerForm = () => {
-  const { userCookie, signinRef, registerSellerDetails } =
+  const { userCookie, signinRef, sellerRef, registerSellerDetails } =
     useContext(apiContext);
   const [sellerLogo, setsellerLogo] = useState();
   const [sellerData, setsellerData] = useState({
@@ -23,7 +23,7 @@ const SellerForm = () => {
   };
 
   const submitForm = async () => {
-    console.log(sellerData);
+    // console.log(sellerData);
     if (
       sellerData.FirmName === "" ||
       sellerData.Firmaddress === "" ||
@@ -35,11 +35,20 @@ const SellerForm = () => {
       return;
     }
     await registerSellerDetails(sellerData, sellerLogo);
-    console.log("done");
+    setsellerLogo({});
+    // console.log(sellerLogo);
+    setsellerData({
+      FirmName: "",
+      FirmAddress: "",
+      FirmPhone: "",
+      FirmEmail: "",
+      GSTNO: "",
+    });
+    sellerRef.current.click();
   };
 
   useEffect(() => {
-    if (userCookie.current === "") {
+    if (userCookie.current === "" || userCookie.current === null) {
       signinRef.current.click();
     }
   }, [userCookie, signinRef]);

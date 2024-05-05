@@ -4,6 +4,10 @@ const sign = "dharmik@1patel@2Vishnubhai";
 
 const fetchUser = async (req, res, next) => {
   const token = req.header("auth_token");
+  if (token === null || token === "" || token === " ") {
+    res.json({ EmptyJWT: "empty JWT" });
+    return;
+  }
   if (!token) {
     res.json({ error: "please validate using authorised method!1" });
   }

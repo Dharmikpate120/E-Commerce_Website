@@ -1,5 +1,5 @@
-
 const express = require("express");
+const express1 = require("express")();
 const bodyParser = require("body-parser");
 
 const auth = require("./routes/auth");
@@ -7,6 +7,7 @@ const userdata = require("./routes/userdata");
 const cors = require("cors");
 
 const app = express();
+
 app.use(cors());
 app.use("/images", express.static(__dirname + "/images"));
 app.use("/profile_images", express.static(__dirname + "/profile_images"));
@@ -16,7 +17,7 @@ app.use("/products_images", express.static(__dirname + "/products_images"));
 app.use(
   express.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 })
 );
-app.use(bodyParser.json());
+app.use(express.json());
 
 // Authentication routes route
 app.use("/auth", auth);

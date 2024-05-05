@@ -1,4 +1,4 @@
-import React, { useContext, useEffect,  useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { apiContext } from "../context/apiContext";
 
@@ -10,8 +10,8 @@ const Signin = () => {
     });
   }, []);
   const { UserSignin, fetchUserCookie } = useContext(apiContext);
-  const [alert,setalert]=useState();
-  const [displayAlert,setdisplayAlert] = useState("none");
+  const [alert, setalert] = useState();
+  const [displayAlert, setdisplayAlert] = useState("none");
   const [UserCred, setUserCred] = useState({
     email: "",
     password: "",
@@ -25,11 +25,10 @@ const Signin = () => {
     try {
       setalert(await UserSignin(UserCred.email, UserCred.password));
       setdisplayAlert("flex");
-      setTimeout(()=>{
+      setTimeout(() => {
         setalert("");
         setdisplayAlert("none");
-        
-      },[1000])
+      }, [1000]);
       await fetchUserCookie();
     } catch (error) {
       console.log(error);
@@ -38,7 +37,9 @@ const Signin = () => {
 
   return (
     <div className="signinMain">
-      <div className="Alert" style={{display:`${displayAlert}`}}>{alert}</div>
+      <div className="Alert" style={{ display: `${displayAlert}` }}>
+        {alert}
+      </div>
       <div className="signin">
         <div className="signinTitle">Log In</div>
         <form className="signinForm" action="">

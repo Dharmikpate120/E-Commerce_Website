@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import Card from "./Card";
+import { apiContext } from "../context/apiContext";
 
 const Productcard = (props) => {
   var products = props.products;
@@ -7,21 +8,14 @@ const Productcard = (props) => {
     <>
       <div className="cards">
         {/* left arrow start */}
-        <div className="coverLeft">
-        </div>
+        <div className="coverLeft"></div>
 
         <div className="cardscroll">
           {products.map((element, i) => {
-            return (<>
-              
-            <Card productDetails={element} key={i} />
-            <Card productDetails={element} key={i} />
-            </>
-            );
+            return <Card productDetails={element} key={i} />;
           })}
         </div>
-        <div className="coverRight">
-        </div>
+        <div className="coverRight"></div>
       </div>
     </>
   );

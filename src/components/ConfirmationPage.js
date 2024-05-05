@@ -1,38 +1,74 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { apiContext } from "../context/apiContext";
 import ConfirmationItem from "./ConfirmationItem";
 import { NavLink } from "react-router-dom";
 
 const ConfirmationPage = () => {
-  const { userCookie, signinRef } = useContext(apiContext);
+  const [UserDetails, setUserDetails] = useState();
+  const [CartItems, setCartItems] = useState([{ price: null }]);
+  const [Quantity, setQuantity] = useState([0]);
+  const [TotalPrice, setTotalPrice] = useState(0);
+  const [TotalQuantity, setTotalQuantity] = useState(0);
+  const {
+    userCookie,
+    signinRef,
+    fetchUserDetails,
+    fetchCartItems,
+    fetchProductsById,
+  } = useContext(apiContext);
   useEffect(() => {
-    if (userCookie.current === "") {
+    if (userCookie.current === "" || userCookie.current === null) {
       signinRef.current.click();
     }
+
   }, [userCookie, signinRef]);
+
+  useEffect(() => {
+    return async () => {
+      const data1 = await fetchUserDetails();
+      setUserDetails(data1);
+      const data2 = await fetchCartItems();
+      setQuantity(data2[1]);
+      const products = await fetchProductsById(data2);
+      setCartItems(products);
+    };
+  }, []);
+  useEffect(() => {
+    var totalprice = 0;
+    var totalquantity = 0;
+    CartItems.forEach((element, i) => {
+      totalprice = totalprice + element.price * Quantity[i];
+      totalquantity = totalquantity + parseInt(Quantity[i]);
+    });
+    setTotalPrice(totalprice);
+    setTotalQuantity(totalquantity);
+  }, [CartItems]);
+
   return (
     <>
       <div className="confirmationMain">
         <div className="personalInformation">
           <div className="title">Your Name:</div>
           <div className="titleValue">
-            <input type="text" name="Name"></input>
-            <i className="trash1 fa-solid fa-trash"></i>
+            <div>
+              {UserDetails
+                ? UserDetails.firstname + " " + UserDetails.lastname
+                : "No Name"}
+            </div>
           </div>
           <div className="title">Your Address:</div>
           <div className="titleValue">
-            <input type="text" name="Name"></input>
-            <i className="trash1 fa-solid fa-trash"></i>
+            <div>{UserDetails ? UserDetails.address : "No Address"}</div>
           </div>
           <div className="title">Your Phone:</div>
           <div className="titleValue">
-            <input type="text" name="Name"></input>
-            <i className="trash1 fa-solid fa-trash"></i>
+            <div>{UserDetails ? UserDetails.phone : "No Phone Number"}</div>
           </div>
           <div className="title">Your Email:</div>
           <div className="titleValue">
-            <input type="text" name="Name"></input>
-            <i className="trash1 fa-solid fa-trash"></i>
+            <div>
+              {UserDetails ? UserDetails.emailaddress : "No Email Address"}
+            </div>
           </div>
         </div>
         <div className="itemsMain">
@@ -45,20 +81,26 @@ const ConfirmationPage = () => {
             <div className="totalprice">TotalPrice</div>
           </div>
           <div className="Items">
-            <ConfirmationItem />
-            <ConfirmationItem />
-            <ConfirmationItem />
-            <ConfirmationItem />
-            <ConfirmationItem />
-
-            {/* </div> */}
+            {CartItems.map((element, i) => {
+              return (
+                <ConfirmationItem
+                  product={element}
+                  quantity={Quantity[i]}
+                  key={i}
+                  index={i + 1}
+                />
+              );
+            })}
           </div>
           <div className="grandTotal">
             <div className="totalitems">
-              <div className="title">Total Items:50</div>
+              <div className="title">Total Items:{TotalQuantity}</div>
             </div>
             <div className="grandtotal">
-              <div className="title">Grand Total:10000$</div>
+              <div className="title">
+                Grand Total:{TotalPrice}
+                <i className="fa-solid fa-indian-rupee-sign" />
+              </div>
               <div className="notice">(Inc. of all Taxes)</div>
             </div>
           </div>

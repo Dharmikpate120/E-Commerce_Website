@@ -1,14 +1,19 @@
-import React from 'react';
+import React from "react";
 
-const ConfirmationItem = () => {
+const ConfirmationItem = (props) => {
   return (
     <div className="ItemMain">
-      <div className="index">100</div>
-      <div className="productName">Computer Tabels</div>
-      <div className="totalQuantity">200$ * 10</div>
-      <div className="totalprice">2000$</div>
+      <div className="index">{props.index}</div>
+      <div className="productName">{props.product.name}</div>
+      <div className="totalQuantity">
+        {props.product.price + " * " + props.quantity}
+      </div>
+      <div className="totalprice">
+        {props.product.price * props.quantity}
+        <i className="fa-solid fa-indian-rupee-sign" />
+      </div>
     </div>
   );
-}
+};
 
 export default ConfirmationItem;

@@ -5,7 +5,8 @@ const ContextProvider = (props) => {
   const [sellerData, setsellerData] = useState({});
   const host = "http://localhost:5000";
   const signinRef = useRef(null);
-  const homeRef = useRef(null);
+  const homeRef = useRef("a");
+  const sellerRef = useRef(null);
   const userCookie = useRef("");
 
   const UserSignin = async (email, password) => {
@@ -23,7 +24,9 @@ const ContextProvider = (props) => {
     const user1 = await user.json();
 
     if (user1.user) {
-      document.cookie = `user=${user1.user};max-age=${60 * 60 * 24 * 10}`;
+      document.cookie = `user=${user1.user};path=/;max-age=${
+        60 * 60 * 24 * 10
+      }`;
 
       fetchUserCookie();
       homeRef.current.click();
@@ -72,7 +75,9 @@ const ContextProvider = (props) => {
 
     const user1 = await user.json();
     if (user1.user) {
-      document.cookie = `user=${user1.user};max-age=${60 * 60 * 24 * 10}`;
+      document.cookie = `user=${user1.user};path=/;max-age=${
+        60 * 60 * 24 * 10
+      }`;
       fetchUserCookie();
       homeRef.current.click();
     } else {
@@ -129,7 +134,6 @@ const ContextProvider = (props) => {
 
   const addToCart = async (product_id) => {
     const body = { product_id: product_id };
-    console.log(userCookie);
     const item = await fetch(`${host}/userdata/addToCart`, {
       method: "POST",
       headers: {
@@ -139,7 +143,6 @@ const ContextProvider = (props) => {
       body: JSON.stringify(body),
     });
     const item1 = await item.json();
-    console.log(item1);
     return item;
   };
   const fetchCartItems = async () => {
@@ -153,6 +156,9 @@ const ContextProvider = (props) => {
       },
     });
     const item1 = await item.json();
+    if (item1.EmptyJWT) {
+      return [];
+    }
     const value = item1.product_id.split(";");
     value.forEach((element1) => {
       const value1 = element1.split("x");
@@ -165,11 +171,22 @@ const ContextProvider = (props) => {
     return [productIdArray, productCountArray];
   };
 
+  const emptyCart = async () => {
+    await fetch(`${host}/userdata/emptyCart`, {
+      method: "POST",
+      headers: {
+        auth_token: userCookie.current,
+      },
+    });
+  };
+
   const fetchProductsById = async (product_ids) => {
     var products = "";
     var item1 = [];
-    const ItemIndex = await fetchCartItems();
-
+    const ItemIndex = product_ids;
+    if (ItemIndex.length === 0) {
+      return [];
+    }
     ItemIndex[0].forEach((element) => {
       products = products + `${element};`;
     });
@@ -191,6 +208,16 @@ const ContextProvider = (props) => {
     return item1;
   };
 
+  const fetchLikedProducts = async (products) => {
+    var items = await fetch(`${host}/userdata/fetchProductsId`, {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({ product_id: products }),
+    });
+    items = await items.json();
+    return items;
+  };
+
   const registerSellerDetails = async (sellerData, sellerLogo) => {
     const body = new FormData();
 
@@ -206,7 +233,6 @@ const ContextProvider = (props) => {
       headers: { auth_token: userCookie.current },
       body: body,
     });
-    console.log(response);
   };
 
   const fetchSellerData = async () => {
@@ -218,30 +244,69 @@ const ContextProvider = (props) => {
     const response1 = await response.json();
     return response1;
   };
-  const insertProduct = async (ProductDetails, ProductImages)=>{
+  const insertProduct = async (ProductDetails, ProductImages) => {
     const body = new FormData();
-    ProductImages.forEach(element => {
-      
-      body.append("productImages",element);
+    ProductImages.forEach((element) => {
+      body.append("productImages", element);
     });
     body.append("Name", ProductDetails.Name);
     body.append("Category", ProductDetails.Category);
     body.append("Description", ProductDetails.Description);
     body.append("Price", ProductDetails.Price);
 
-
     const response = await fetch(`${host}/userdata/insertProduct`, {
       method: "POST",
       headers: { auth_token: userCookie.current },
-      body:body,
+      body: body,
     });
-    console.log(response);
-  }
+  };
+
+  const fetchLikedItems = async () => {
+    const response = await fetch(`${host}/userdata/fetchLikedItems`, {
+      method: "POST",
+      headers: {
+        auth_token: userCookie.current,
+      },
+    });
+    const response1 = await response.json();
+    if (response1.EmptyJWT) {
+      return [];
+    }
+    return response1;
+  };
+
+  const insertLikes = async (product_id) => {
+    const response = await fetch(`${host}/userdata/InsertLikes`, {
+      method: "POST",
+      headers: {
+        auth_token: userCookie.current,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ product_id: product_id }),
+    });
+    const response1 = await response.json();
+    return response1;
+  };
+
+  const DeleteLikes = async (product_id) => {
+    const response = await fetch(`${host}/userdata/DeleteLikes`, {
+      method: "POST",
+      headers: {
+        auth_token: userCookie.current,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ product_id: product_id }),
+    });
+    const response1 = await response.json();
+    return response1;
+  };
+
   return (
     <apiContext.Provider
       value={{
         signinRef,
         homeRef,
+        sellerRef,
         UserSignin,
         UserSignup,
         fetchCookie,
@@ -252,12 +317,18 @@ const ContextProvider = (props) => {
         fetchUserDetails,
         addToCart,
         fetchCartItems,
+        emptyCart,
         fetchProductsById,
         registerSellerDetails,
         fetchSellerData,
         sellerData,
         setsellerData,
         insertProduct,
+        fetchLikedItems,
+
+        insertLikes,
+        DeleteLikes,
+        fetchLikedProducts,
       }}
     >
       {props.children}

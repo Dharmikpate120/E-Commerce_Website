@@ -19,7 +19,6 @@ import Footer from "./components/Footer";
 import SellerProfile from "./components/SellerProfile";
 import AddProducts from "./components/AddProducts";
 function App() {
-  
   return (
     <>
       <ContextProvider>
@@ -29,13 +28,14 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/Signin" element={<Signin />} />
             <Route path="/Signup" element={<Signup />} />
-            <Route path="/fillUserInfo" element={<FillUserInfo/>}/>
+            <Route path="/fillUserInfo" element={<FillUserInfo />} />
 
             <Route path="/Profile" element={<ProfileNavbar />}>
               <Route path="personalInformation" element={<ProfilePage />} />
               <Route path="SellerInformation" element={<SellerProfile />} />
               <Route path="previousorders" element={<PreviousOrder />} />
               <Route path="Sellerform" element={<SellerForm />} />
+              <Route path="addNewProduct" element={<AddProducts />} />
             </Route>
             <Route path="/userDetails" element={<UserDetails />} />
 
@@ -43,10 +43,8 @@ function App() {
             <Route path="/Cart" element={<Cart />} />
             <Route path="/confirmationPage" element={<ConfirmationPage />} />
             <Route path="/paymentPage" element={<PaymentPage1 />} />
-            <Route path="/addNewProduct" element={<AddProducts />} />
-
           </Routes>
-          <Footer />
+          {<Footer />}
         </BrowserRouter>
       </ContextProvider>
     </>

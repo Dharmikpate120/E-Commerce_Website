@@ -3,12 +3,16 @@ import { NavLink, Outlet } from "react-router-dom";
 import { apiContext } from "../context/apiContext";
 
 const ProfileNavbar = () => {
-  const { fetchUserCookie, userCookie, fetchSellerData, sellerData,setsellerData } =
-    useContext(apiContext);
+  const {
+    fetchUserCookie,
+    userCookie,
+    fetchSellerData,
+    setsellerData,
+    sellerRef,
+  } = useContext(apiContext);
   const signout = () => {
     document.cookie = "user=;path=/";
     fetchUserCookie();
-    console.log(userCookie);
   };
   useEffect(() => {
     return async () => {
@@ -19,7 +23,7 @@ const ProfileNavbar = () => {
   return (
     <div className="ProfileMain">
       <div className="profileNavigation">
-        <div className="opener">
+        <div className="opener">    
           <hr />
           <hr />
           <hr />
@@ -29,16 +33,24 @@ const ProfileNavbar = () => {
             <div className="buttons">Personal Information</div>
           </NavLink>
           <hr />
-          <NavLink className="linker" to="/Profile/SellerInformation">
+          <NavLink
+            className="linker"
+            ref={sellerRef}
+            to="/Profile/SellerInformation"
+          >
             <div className="buttons">Firm Information</div>
           </NavLink>
           <hr />
-          <NavLink className="linker" to="/Profile/previousorders">
+          {/* <NavLink className="linker" to="/Profile/previousorders">
             <div className="buttons">previous orders</div>
           </NavLink>
-          <hr />
+          <hr /> */}
           <NavLink className="linker" to="/Profile/SellerForm">
             <div className="buttons">Become a Seller</div>
+          </NavLink>
+          <hr />
+          <NavLink className="linker" to="/Profile/addNewProduct">
+            <div className="buttons">Add New Product</div>
           </NavLink>
           <hr />
           <NavLink className="linker" to="/Signin">
@@ -46,6 +58,7 @@ const ProfileNavbar = () => {
               Signout
             </div>
           </NavLink>
+          <hr />
         </div>
       </div>
       <Outlet />

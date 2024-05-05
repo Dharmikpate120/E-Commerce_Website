@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 const ProfilePage = () => {
   const { userCookie, signinRef, fetchUserDetails } = useContext(apiContext);
   useEffect(() => {
-    if (userCookie.current === "") {
+    if (userCookie.current === "" || userCookie.current===null) {
       signinRef.current.click();
     }
   }, [userCookie, signinRef]);
@@ -63,9 +63,12 @@ const ProfilePage = () => {
               <div className="value">{UserDetails.gender}</div>
             </div>
           </div>
+          <div className="editButtonMain">
+
           <NavLink className="editButton" to="/fillUserInfo">
             Edit Information
           </NavLink>
+          </div>
         </div>
       </>
     )

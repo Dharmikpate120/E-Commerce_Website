@@ -121,20 +121,16 @@ router.post("/addToCart", fetchUser, async (req, res) => {
       const value = result[0].product_id.split(";");
       value.forEach((element1) => {
         const value1 = element1.split("x");
-        // console.log(value1[0]);
-        // console.log(value1[1]);
         productIdArray.push(value1[0]);
         productCountArray.push(value1[1]);
       });
       const index = productIdArray.indexOf(`${product_id}`);
 
-      console.log(index);
       productIdArray.pop();
       productCountArray.pop();
       if (index < 0) {
         productIdArray.push(product_id);
         productCountArray.push("1");
-        // console.log(productIdArray);
       } else {
         productCountArray[index] = parseInt(productCountArray[index]) + 1;
       }
@@ -145,11 +141,9 @@ router.post("/addToCart", fetchUser, async (req, res) => {
           `${parseInt(productIdArray[i])}x${parseInt(productCountArray[i])};`;
       }
 
-      console.log(variableString);
       const query = `UPDATE \`cart\` SET \`product_id\`='${variableString}' WHERE auth_id=${auth_id}`;
       connection.query(query, (err, result) => {
         if (err) throw err;
-        console.log(product_id);
         res.send(result);
       });
     } catch (err) {
@@ -162,8 +156,17 @@ router.post("/fetchCart", fetchUser, async (req, res) => {
   const query = `SELECT \`product_id\` FROM \`cart\` WHERE auth_id=${auth_id};`;
   connection.query(query, (err, result) => {
     if (err) console.log(err);
-
     res.json(result[0]);
+  });
+});
+router.post("/emptyCart", fetchUser, async (req, res) => {
+  const auth_id = req.auth_id;
+  const query = `UPDATE \`cart\` SET \`product_id\`='' WHERE auth_id=${auth_id};`;
+  console.log(query);
+  connection.query(query, (err, result) => {
+    if (err) console.log(err);
+    res.json(result[0]);
+    console.log(result);
   });
 });
 
@@ -202,21 +205,17 @@ router.post(
     const query0 = `SELECT \`seller_id\` FROM \`seller_data\` WHERE auth_id=${auth_id}`;
     connection.query(query0, (err, result) => {
       if (err) throw err;
-      console.log(result);
-      console.log(result.length);
 
       if (result.length > 0) {
         const query1 = `UPDATE \`seller_data\` SET \`firm_name\`='${FirmName}',\`firm_address\`='${FirmAddress}',\`firm_phone\`='${FirmPhone}',\`firm_email\`='${FirmEmail}',\`firm_logo\`='${LogoName}',\`GSTNO\`='${GSTNo}' WHERE seller_id=${result[0].seller_id}`;
         connection.query(query1, (err, result) => {
           if (err) throw err;
-          console.log(result);
           res.send("done1");
         });
       } else {
         const query = `INSERT INTO \`seller_data\`(\`firm_name\`, \`firm_address\`, \`firm_phone\`, \`firm_email\`, \`firm_logo\`, \`GSTNO\`, \`auth_id\`, \`seller_id\`) VALUES ('${FirmName}','${FirmAddress}','${FirmPhone}','${FirmEmail}','${LogoName}','${GSTNo}','${auth_id}','${seller_id}')`;
         connection.query(query, (err, result) => {
           if (err) throw err;
-          console.log(result);
           res.send("done2");
         });
       }
@@ -230,11 +229,8 @@ router.post("/fetchSellerData", fetchUser, (req, res) => {
   connection.query(query, (err, result) => {
     if (err) throw err;
     if (result[0]) {
-      console.log("hello");
-      console.log(result[0]);
       res.json(result[0]);
     } else {
-      console.log("hello");
       res.json({
         error: "Your are not a seller, Setup Your seller Account Now!",
       });
@@ -273,31 +269,94 @@ router.post(
     const Price = req.body.Price;
     const Product_id = Date.now();
     var image = "";
-    console.log(req.files)
     for (var i = 0; i < req.files.length; i++) {
       image = image + req.files[i].filename + ";";
     }
-    console.log(image);
     const query0 = `SELECT \`seller_id\` FROM \`seller_data\` WHERE auth_id=${auth_id}`;
-    console.log(auth_id);
     connection.query(query0, (err, result) => {
       if (err) console.log(err);
       if (result.length > 0) {
         seller_id = parseInt(result[0].seller_id);
         const query = `INSERT INTO \`products\`(\`seller_id\`, \`product_id\`, \`name\`, \`category\`, \`image\`, \`description\`, \`price\`, \`rating\`) VALUES ('${seller_id}','${Product_id}','${Name}','${Category}','${image} ','${Description}','${Price}','4.5')`;
-        // console.log(query);
         connection.query(query, (err, result) => {
           if (err) throw err;
-          // console.log(result);
           res.send(result);
         });
-      }
-      else{
+      } else {
         res.send(result.length);
       }
     });
   }
 );
+
+router.post("/InsertLikes", fetchUser, (req, res) => {
+  const auth_id = req.auth_id;
+  const product_id = req.body.product_id.toString();
+
+  if (!product_id) {
+    res.json({ error: "No product Id provided!" });
+    return;
+  }
+  var LikedProducts = "";
+
+  const query = `SELECT  \`product_ids\` FROM \`likeditems\` WHERE auth_id = ${auth_id}`;
+  connection.query(query, (err, result) => {
+    if (err) throw err;
+    const products = result[0].product_ids.split(";");
+    products.pop("");
+    if (products.includes(product_id)) {
+      res.json({ alreadyPresent: "product is already in likes!" });
+    } else {
+      products.push(product_id);
+      products.forEach((element) => {
+        LikedProducts = LikedProducts + element + ";";
+      });
+      const query1 = `UPDATE \`likeditems\` SET \`product_ids\`='${LikedProducts}' WHERE auth_id = ${auth_id};`;
+      connection.query(query1, (err, result) => {
+        if (err) throw err;
+      });
+      res.json({ success: "Product Added to Favourites!" });
+    }
+  });
+});
+
+router.post("/fetchLikedItems", fetchUser, (req, res) => {
+  const auth_id = req.auth_id;
+  const query = `SELECT \`product_ids\` FROM \`likeditems\` WHERE auth_id=${auth_id}`;
+  connection.query(query, (err, result) => {
+    if (err) throw err;
+    const products = result[0].product_ids.split(";");
+    products.pop("");
+    res.json(products);
+  });
+});
+
+router.post("/DeleteLikes", fetchUser, (req, res) => {
+  const auth_id = req.auth_id;
+  const product_id = req.body.product_id;
+  var productQuery = "";
+  const query = `SELECT \`product_ids\` FROM \`likeditems\` WHERE auth_id=${auth_id}`;
+  connection.query(query, (err, result) => {
+    if (err) throw err;
+    const products = result[0].product_ids.split(";");
+    products.pop("");
+    if (products.includes(`${product_id}`)) {
+      products.splice(products.indexOf(`${product_id}`), 1);
+      products.forEach((element) => {
+        productQuery = productQuery + element + ";";
+      });
+      const query1 = `UPDATE \`likeditems\` SET \`product_ids\`='${productQuery}' WHERE auth_id=${auth_id}`;
+      connection.query(query1, (err, result) => {
+        if (err) throw err;
+        res.json({ success: "Product Deleted Successfully!" });
+      });
+    } else {
+      res.json({
+        noProducts: "No Such Products Present in Your Favourites List!",
+      });
+    }
+  });
+});
 
 module.exports = router;
 

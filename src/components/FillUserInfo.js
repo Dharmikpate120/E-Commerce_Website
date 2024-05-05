@@ -8,7 +8,7 @@ const FillUserInfo = () => {
   const [profileImageShow, setprofileImageShow] = useState(null);
   const [profileImage, setprofileImage] = useState(null);
   useEffect(() => {
-    if (userCookie.current === "") {
+    if (userCookie.current === "" || userCookie.current === null) {
       signinRef.current.click();
     }
   }, [userCookie, signinRef]);
@@ -24,11 +24,22 @@ const FillUserInfo = () => {
   });
   const OnChange = (e) => {
     setUserData({ ...UserData, [e.target.name]: e.target.value });
-    
   };
 
   const submitPersonalInformation = async () => {
-    await setUserDetails(UserData,profileImage);
+    if (
+      UserData.Firstname === "" ||
+      UserData.Lastname === "" ||
+      UserData.Address === "" ||
+      UserData.Phone === "" ||
+      UserData.Birthdate === "" ||
+      UserData.Gender === "" ||
+      profileImage === null
+    ) {
+      alert("All fields Are required");
+      return;
+    }
+    await setUserDetails(UserData, profileImage);
     profileRef.current.click();
   };
   const uploadClicker = () => {
@@ -36,7 +47,7 @@ const FillUserInfo = () => {
   };
   const PIChange = (e) => {
     setprofileImage(e.target.files[0]);
-    
+
     setprofileImageShow(URL.createObjectURL(e.target.files[0]));
   };
   return (

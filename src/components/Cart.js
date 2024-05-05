@@ -4,23 +4,32 @@ import { NavLink } from "react-router-dom";
 import CartItem from "./CartItem";
 
 const Cart = () => {
-  const { userCookie, signinRef, fetchProductsById } = useContext(apiContext);
-  const [items, setitems] = useState(null);
+  const {
+    userCookie,
+    signinRef,
+    fetchProductsById,
+    fetchCartItems,
+    emptyCart,
+  } = useContext(apiContext);
+  const [items, setitems] = useState([]);
+  // const [cartRefresher, setcartRefresher] = useState(false);
   var total = useRef(0);
   useEffect(() => {
-    if (userCookie.current === "") {
+    if (userCookie.current === "" || userCookie.current === null) {
       signinRef.current.click();
     }
   }, [userCookie, signinRef]);
+
   useEffect(() => {
     const fetchdata = async () => {
-      const data = await fetchProductsById();
+      const cartItems = await fetchCartItems();
+      const data = await fetchProductsById(cartItems);
       setitems(data);
     };
     fetchdata();
   }, [fetchProductsById]);
   useEffect(() => {
-    if (!items) {
+    if (items.length === 0) {
       return;
     } else {
       total.current = 0;
@@ -29,12 +38,15 @@ const Cart = () => {
       });
     }
   }, [items]);
-
+  console.log(items);
   return (
-    items && (
+    items &&
+    (items.length ? (
       <>
         <div className="cartMain">
-          <div className="cartTitle">your cart:</div>
+          <div className="cartTitle" id="cartMain">
+            your cart:
+          </div>
           <div className="cover">
             <div className="items">
               {items.map((element, i) => {
@@ -45,18 +57,40 @@ const Cart = () => {
                 <div className="finalPayable">
                   <div className="headding">Sub Total:</div>
                   <div className="Finalvalue">
-                    {total.current}$(inc. of all taxes)
+                    {total.current}
+                    <i className="fa-solid fa-indian-rupee-sign" />
+                    {" (inc. of all taxes)"}
                   </div>
                 </div>
               </div>
-              <div className="proceedBtn">
-                <NavLink to="/confirmationPage">Proceed to Buy!</NavLink>
+              <div className="actionButtons">
+                <div
+                  className="emptyBtn"
+                  onClick={() => {
+                    if (window.confirm("Are you Sure?")) {
+                      emptyCart();
+                      setitems([]);
+                      window.scrollTo({ top: 0 });
+                    } else {
+                      return;
+                    }
+                  }}
+                >
+                  Empty Yo Cart
+                </div>
+                <div className="proceedBtn">
+                  <NavLink to="/confirmationPage">Proceed to Buy!</NavLink>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </>
-    )
+    ) : (
+      <div className="cartMain">
+        <div className="placeHolder">No Items In Yo Cart!</div>
+      </div>
+    ))
   );
 };
 

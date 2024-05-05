@@ -3,7 +3,8 @@ import { NavLink } from "react-router-dom";
 import { apiContext } from "../context/apiContext";
 
 const AddProducts = () => {
-  const { insertProduct } = useContext(apiContext);
+  const { insertProduct, userCookie, signinRef, homeRef } =
+    useContext(apiContext);
   const ImageInput = useRef();
   const [ProductDetails, setProductDetails] = useState({
     Name: "",
@@ -12,7 +13,12 @@ const AddProducts = () => {
     Price: "",
   });
   const [ProductImages, setProductImages] = useState([]);
-  //   const [ImageUrl, setImageUrl] = useState([]);
+  useEffect(() => {
+    if (userCookie.current === "" || userCookie.current === null) {
+      signinRef.current.click();
+    }
+  }, [userCookie, signinRef]);
+
   const onTextChange = (e) => {
     setProductDetails({ ...ProductDetails, [e.target.name]: e.target.value });
   };
@@ -22,13 +28,25 @@ const AddProducts = () => {
   console.log(ProductDetails);
 
   const submitProductDetails = () => {
-    if(ProductDetails.Name===""||ProductDetails.Category===""||ProductDetails.Description===""||ProductDetails.Price===""||ProductImages.length<0){
-        alert("all fields are necessary!");
-        return;
+    // homeRef.current.click();
+    if (
+      ProductDetails.Name === "" ||
+      ProductDetails.Category === "" ||
+      ProductDetails.Description === "" ||
+      ProductDetails.Price === "" ||
+      ProductImages.length < 0
+    ) {
+      alert("all fields are necessary!");
+      return;
     }
-    // const ImagesArray = Array.from(ProductImages);
-    // console.log(ImagesArray)
-    insertProduct(ProductDetails,Array.from(ProductImages));
+    insertProduct(ProductDetails, Array.from(ProductImages));
+    setProductDetails({
+      Name: "",
+      Category: "",
+      Description: "",
+      Price: "",
+    });
+    // console.log(sellerRef.current);
   };
   return (
     <div className="addProductsMain">
@@ -51,7 +69,9 @@ const AddProducts = () => {
           onChange={onTextChange}
           name="Category"
         >
-          <option value="" defaultChecked>None</option>
+          <option value="" defaultChecked>
+            None
+          </option>
           <option value="Mens">Men's</option>
           <option value="Womens">Women's</option>
           <option value="electronic">electronic</option>
@@ -94,7 +114,9 @@ const AddProducts = () => {
         {/* <i className="trash1 fa-solid fa-trash"></i>
         </div> */}
         <div className="sellerButton">
-          <NavLink onClick={submitProductDetails}>Add Product</NavLink>
+          <NavLink onClick={submitProductDetails}>
+            Add Product
+          </NavLink>
         </div>
       </div>
     </div>

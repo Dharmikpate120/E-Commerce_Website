@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import { apiContext } from "../context/apiContext";
 
 const PreviousOrder = () => {
+  const { userCookie, signinRef } = useContext(apiContext);
+  useEffect(() => {
+    if (userCookie.current === "" || userCookie.current === null) {
+      signinRef.current.click();
+    }
+  }, [userCookie, signinRef]);
+
   return (
     <>
       <div className="OrdersMain">

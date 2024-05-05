@@ -3,11 +3,12 @@ import { apiContext } from "../context/apiContext";
 
 const UserDetails = () => {
   const { userCookie, signinRef } = useContext(apiContext);
-  useEffect(() => {
-    if (userCookie.current === "") {
-      signinRef.current.click();
-    }
-  }, [userCookie, signinRef]);
+   useEffect(() => {
+     if (userCookie.current === "" || userCookie.current === null) {
+       signinRef.current.click();
+     }
+   }, [userCookie, signinRef]);
+
   return (
     <>
       <div className="userDetailsMain">

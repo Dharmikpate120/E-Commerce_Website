@@ -33,26 +33,26 @@ router.post("/signup", async (req, res) => {
       connection.query(sql, (err) => {
         if (err) throw err;
       });
-      //insertion query for user data
-      // const query0 = `INSERT INTO \`user_data\`( \`auth_id\`,\`emailaddress\`) VALUES ('${id}','${email}')`;
-      // connection.query(query0, (err, result) => {
+      // insert ion query for user data
+      const query0 = `INSERT INTO \`user_data\`( \`auth_id\`,\`emailaddress\`) VALUES ('${id}','${email}')`;
+      connection.query(query0, (err, result) => {
+        if (err) throw err;
+      });
+
+      const cartInsertion = `INSERT INTO \`cart\`(\`auth_id\`) VALUES ('${id}')`;
+      connection.query(cartInsertion, (err, result) => {
+        if (err) throw err;
+      });
+
+      const likedInsertion = `INSERT INTO \`likeditems\`(\`auth_id\` ) VALUES ('${id}')`;
+      connection.query(likedInsertion, (err, result) => {
+        if (err) throw err;
+      });
+
+      // const query1 = `INSERT INTO \`seller_data\`( \`auth_id\`) VALUES ('${id}')`;
+      // connection.query(query1, (err, result) => {
       //   if (err) throw err;
       // });
-
-      // const cartInsertion = `INSERT INTO \`cart\`(\`auth_id\`) VALUES ('${id}')`;
-      // connection.query(cartInsertion, (err, result) => {
-      //   if (err) throw err;
-      // });
-
-      // const likedInsertion = `INSERT INTO \`likeditems\`(\`auth_id\` ) VALUES ('${id}')`;
-      // connection.query(likedInsertion, (err, result) => {
-      //   if (err) throw err;
-      // });
-
-      // // const query1 = `INSERT INTO \`seller_data\`( \`auth_id\`) VALUES ('${id}')`;
-      // // connection.query(query1, (err, result) => {
-      // //   if (err) throw err;
-      // // });
       res.json({ user: token });
     }
   });

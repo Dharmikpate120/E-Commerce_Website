@@ -325,9 +325,13 @@ router.post("/fetchLikedItems", fetchUser, (req, res) => {
   const query = `SELECT \`product_ids\` FROM \`likeditems\` WHERE auth_id=${auth_id}`;
   connection.query(query, (err, result) => {
     if (err) throw err;
-    const products = result[0].product_ids.split(";");
-    products.pop("");
-    res.json(products);
+    if (result[0]) {
+      const products = result[0]?.product_ids.split(";");
+      products.pop("");
+      res.json(products);
+    } else {
+      res.json({ error: "unknown errors" });
+    }
   });
 });
 

@@ -4,7 +4,7 @@ const connection = createConnection({
   host: "localhost",
   user: "root",
   password: "",
-  database: "ecommerce-website",
+  database: "ecommerce_website",
   insecureAuth: true,
 });
 

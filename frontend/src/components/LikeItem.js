@@ -5,7 +5,7 @@ const LikeItem = (props) => {
   const { addToCart } = useContext(apiContext);
   const item = props.item;
   var image = "http://localhost:5000/products_images/";
-  image = image + item.image.split(";")[0];
+  image = image + item.image[0];
   const cartButton = () => {
     addToCart(item.product_id);
   };

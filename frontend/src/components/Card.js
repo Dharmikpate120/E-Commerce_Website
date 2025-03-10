@@ -12,7 +12,7 @@ const Card = (props) => {
   const cartButton = () => {
     addToCart(product.product_id);
   };
-  const productImages = product.image.split(";");
+  const productImages = product.image;
 
   const insertLike = async () => {
     setlikeStatus(false);

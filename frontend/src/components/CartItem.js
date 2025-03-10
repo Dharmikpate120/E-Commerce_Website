@@ -2,14 +2,11 @@ import React from "react";
 
 const CartItem = (props) => {
   const item = props.item;
-  // console.log(item.image);
   return (
     <div className="item">
       <div className="productImage">
         <img
-          src={
-            "http://localhost:5000/products_images/" + item.image.split(";")[0]
-          }
+          src={"http://localhost:5000/products_images/" + item.image[0]}
           alt=""
         />
       </div>

@@ -4,17 +4,21 @@ import { NavLink } from "react-router-dom";
 
 const ProfilePage = () => {
   const { userCookie, signinRef, fetchUserDetails } = useContext(apiContext);
+  const [UserDetails, setUserDetails] = useState();
+
   useEffect(() => {
-    if (userCookie.current === "" || userCookie.current===null) {
+    if (userCookie.current === "" || userCookie.current === null) {
       signinRef.current.click();
     }
   }, [userCookie, signinRef]);
-  const [UserDetails, setUserDetails] = useState();
+
   useEffect(() => {
-    fetchUserDetails().then((results) => {
-      setUserDetails(results);
-    });
-  },[]);
+    if (userCookie.current && userCookie.current !== "") {
+      fetchUserDetails().then((results) => {
+        setUserDetails(results);
+      });
+    }
+  }, [fetchUserDetails, userCookie]);
   return (
     UserDetails && (
       <>
@@ -33,7 +37,9 @@ const ProfilePage = () => {
             <div className="profilepic">
               <div className="image">
                 <img
-                  src={"http://localhost:5000/profile_images/"+UserDetails.profileImage}
+                  src={
+                    "http://localhost:5000/profile_images/" + UserDetails.image
+                  }
                   alt="Profile"
                 />
               </div>
@@ -43,12 +49,12 @@ const ProfilePage = () => {
             <div className="phone">
               <div className="label">Your Phone</div>
 
-              <div className="value">{UserDetails.phone}</div>
+              <div className="value">{UserDetails.mobilenumber}</div>
             </div>
             <div className="address">
               <div className="label">Your email</div>
 
-              <div className="value">{UserDetails.emailaddress}</div>
+              <div className="value">{UserDetails.email}</div>
             </div>
           </div>
           <div className="information2">
@@ -60,14 +66,13 @@ const ProfilePage = () => {
             <div className="address">
               <div className="label">Your gender</div>
 
-              <div className="value">{UserDetails.gender}</div>
+              <div className="value">{UserDetails.Gender}</div>
             </div>
           </div>
           <div className="editButtonMain">
-
-          <NavLink className="editButton" to="/fillUserInfo">
-            Edit Information
-          </NavLink>
+            <NavLink className="editButton" to="/fillUserInfo">
+              Edit Information
+            </NavLink>
           </div>
         </div>
       </>

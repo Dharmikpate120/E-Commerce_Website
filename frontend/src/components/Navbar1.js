@@ -12,8 +12,7 @@ function Navbar() {
       e.preventDefault();
     });
     fetchUserCookie();
-    console.log(userCookie.current);
-  }, [fetchUserCookie]);
+  }, [fetchUserCookie, userCookie]);
 
   useEffect(() => {
     window.scrollTo({ top: 0 });

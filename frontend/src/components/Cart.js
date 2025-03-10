@@ -22,23 +22,33 @@ const Cart = () => {
 
   useEffect(() => {
     const fetchdata = async () => {
-      const cartItems = await fetchCartItems();
-      const data = await fetchProductsById(cartItems);
-      setitems(data);
+      if (userCookie.current || userCookie.current === "") {
+        const [productIds, counts] = await fetchCartItems();
+        var data = await fetchProductsById(productIds);
+        data = data.map((el) => {
+          var filter = counts.filter((d) => {
+            return d.id === el.product_id;
+          });
+          el.count = filter[0].count;
+          return el;
+        });
+        setitems(data);
+        // console.log(data);
+      }
     };
     fetchdata();
-  }, [fetchProductsById]);
+  }, [userCookie, fetchCartItems, fetchProductsById]);
   useEffect(() => {
     if (items.length === 0) {
       return;
     } else {
       total.current = 0;
       items.forEach((element) => {
-        total.current = total.current + element.price * element.count;
+        total.current =
+          total.current + Number(element.price) * Number(element.count);
       });
     }
   }, [items]);
-  console.log(items);
   return (
     items &&
     (items.length ? (

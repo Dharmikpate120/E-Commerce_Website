@@ -37,6 +37,7 @@ function App() {
               <Route path="Sellerform" element={<SellerForm />} />
               <Route path="addNewProduct" element={<AddProducts />} />
             </Route>
+            
             <Route path="/userDetails" element={<UserDetails />} />
 
             <Route path="/Favourites" element={<LikedItems />} />

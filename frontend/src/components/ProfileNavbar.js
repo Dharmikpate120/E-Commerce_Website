@@ -5,25 +5,19 @@ import { apiContext } from "../context/apiContext";
 const ProfileNavbar = () => {
   const {
     fetchUserCookie,
-    userCookie,
-    fetchSellerData,
-    setsellerData,
+    // userCookie,
+
     sellerRef,
   } = useContext(apiContext);
   const signout = () => {
     document.cookie = "user=;path=/";
     fetchUserCookie();
   };
-  useEffect(() => {
-    return async () => {
-      setsellerData(await fetchSellerData());
-    };
-  }, []);
-
+  
   return (
     <div className="ProfileMain">
       <div className="profileNavigation">
-        <div className="opener">    
+        <div className="opener">
           <hr />
           <hr />
           <hr />

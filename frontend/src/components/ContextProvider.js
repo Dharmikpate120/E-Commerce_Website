@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { apiContext } from "../context/apiContext";
 
 const ContextProvider = (props) => {
-  const [sellerData, setsellerData] = useState({});
   const host = "http://localhost:5000";
   const signinRef = useRef(null);
   const homeRef = useRef("a");
@@ -109,16 +108,15 @@ const ContextProvider = (props) => {
   };
 
   const fetchUserDetails = async () => {
-    const details = await fetch(`${host}/userdata/fetchUserDetails`, {
+    var details = await fetch(`${host}/userdata/fetchUserDetails`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         auth_token: userCookie.current,
       },
     });
-    const details1 = await details.json();
-
-    return details1[0];
+    details = await details.json();
+    return details;
   };
 
   const fetchProducts = async () => {
@@ -146,9 +144,6 @@ const ContextProvider = (props) => {
     return item;
   };
   const fetchCartItems = async () => {
-    var productIdArray = [];
-    var productCountArray = [];
-
     const item = await fetch(`${host}/userdata/fetchCart`, {
       method: "POST",
       headers: {
@@ -159,16 +154,11 @@ const ContextProvider = (props) => {
     if (item1.EmptyJWT) {
       return [];
     }
-    const value = item1.product_id.split(";");
-    value.forEach((element1) => {
-      const value1 = element1.split("x");
-
-      productIdArray.push(value1[0]);
-      productCountArray.push(value1[1]);
+    const productIds = [];
+    item1.forEach(({ id }) => {
+      productIds.push(id);
     });
-    productIdArray.pop();
-    productCountArray.pop();
-    return [productIdArray, productCountArray];
+    return [productIds, item1];
   };
 
   const emptyCart = async () => {
@@ -181,40 +171,33 @@ const ContextProvider = (props) => {
   };
 
   const fetchProductsById = async (product_ids) => {
-    var products = "";
-    var item1 = [];
-    const ItemIndex = product_ids;
-    if (ItemIndex.length === 0) {
-      return [];
-    }
-    ItemIndex[0].forEach((element) => {
-      products = products + `${element};`;
-    });
+    // var products = "";
+    // var item1 = [];
+    // const ItemIndex = product_ids;
+    // if (ItemIndex.length === 0) {
+    //   return [];
+    // }
+    // ItemIndex[0].forEach((element) => {
+    //   products = products + `${element};`;
+    // });
     var items = await fetch(`${host}/userdata/fetchProductsId`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
-      body: JSON.stringify({ product_id: products }),
-    });
-    items = await items.json();
-    ItemIndex[0].forEach((element, i) => {
-      var count = parseInt(element);
-      items.forEach((element1) => {
-        if (element1.product_id === count) {
-          item1.push({ ...element1, count: ItemIndex[1][i] });
-        }
-      });
+      body: JSON.stringify({ product_id: JSON.stringify(product_ids) }),
     });
 
-    return item1;
+    return await items.json();
   };
 
   const fetchLikedProducts = async (products) => {
+    // console.log(products);
     var items = await fetch(`${host}/userdata/fetchProductsId`, {
       method: "POST",
       headers: { "Content-type": "application/json" },
-      body: JSON.stringify({ product_id: products }),
+      body: JSON.stringify({ product_id: JSON.stringify(products) }),
     });
     items = await items.json();
+    // console.log(items);
     return items;
   };
 
@@ -321,11 +304,8 @@ const ContextProvider = (props) => {
         fetchProductsById,
         registerSellerDetails,
         fetchSellerData,
-        sellerData,
-        setsellerData,
         insertProduct,
         fetchLikedItems,
-
         insertLikes,
         DeleteLikes,
         fetchLikedProducts,

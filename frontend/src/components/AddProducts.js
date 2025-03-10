@@ -25,7 +25,6 @@ const AddProducts = () => {
   const onImageChange = (e) => {
     setProductImages(e.target.files);
   };
-  console.log(ProductDetails);
 
   const submitProductDetails = () => {
     // homeRef.current.click();
@@ -114,9 +113,7 @@ const AddProducts = () => {
         {/* <i className="trash1 fa-solid fa-trash"></i>
         </div> */}
         <div className="sellerButton">
-          <NavLink onClick={submitProductDetails}>
-            Add Product
-          </NavLink>
+          <NavLink onClick={submitProductDetails}>Add Product</NavLink>
         </div>
       </div>
     </div>

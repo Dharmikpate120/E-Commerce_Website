@@ -15,22 +15,23 @@ const Home = () => {
 
   useEffect(() => {
     const fetchdata = async () => {
-      var likedItems = await fetchLikedItems();
-      var product = await fetchProducts();
+      if (userCookie.current || userCookie.current === "") {
+        var likedItems = await fetchLikedItems();
+        var product = await fetchProducts();
 
-      product.forEach((element, i) => {
-        if (likedItems?.includes(`${product[i].product_id}`)) {
-          product[i] = { ...product[i], liked: "fa-solid" };
-        } else {
-          product[i] = { ...product[i], liked: "fa-regular" };
-        }
-      });
-      setproducts(product);
+        product.forEach((_, i) => {
+          if (likedItems?.includes(`${product[i].product_id}`)) {
+            product[i] = { ...product[i], liked: "fa-solid" };
+          } else {
+            product[i] = { ...product[i], liked: "fa-regular" };
+          }
+        });
+        setproducts(product);
+      }
     };
 
     fetchdata();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchProducts]);
+  }, [fetchLikedItems, fetchProducts, userCookie]);
 
   useEffect(() => {
     if (userCookie.current === "" || userCookie.current === null) {

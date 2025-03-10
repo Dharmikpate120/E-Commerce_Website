@@ -20,29 +20,41 @@ const ConfirmationPage = () => {
     if (userCookie.current === "" || userCookie.current === null) {
       signinRef.current.click();
     }
-
   }, [userCookie, signinRef]);
 
   useEffect(() => {
     return async () => {
       const data1 = await fetchUserDetails();
+      console.log(data1);
       setUserDetails(data1);
       const data2 = await fetchCartItems();
-      setQuantity(data2[1]);
-      const products = await fetchProductsById(data2);
+      setQuantity(
+        data2[1].map(({ count }) => {
+          return count;
+        })
+      );
+      var products = await fetchProductsById(data2[0]);
+      products = products.map((el) => {
+        var filter = data2[1].filter((d) => {
+          return d.id === el.product_id;
+        });
+        el.count = filter[0].count;
+        return el;
+      });
       setCartItems(products);
     };
-  }, []);
+  }, [fetchCartItems, fetchProductsById, fetchUserDetails]);
   useEffect(() => {
     var totalprice = 0;
     var totalquantity = 0;
-    CartItems.forEach((element, i) => {
-      totalprice = totalprice + element.price * Quantity[i];
-      totalquantity = totalquantity + parseInt(Quantity[i]);
+
+    CartItems.forEach(({ count, price }, i) => {
+      totalprice = totalprice + Number(price) * Number(count);
+      totalquantity = totalquantity + Number(count);
     });
     setTotalPrice(totalprice);
     setTotalQuantity(totalquantity);
-  }, [CartItems]);
+  }, [CartItems, Quantity]);
 
   return (
     <>
@@ -62,13 +74,13 @@ const ConfirmationPage = () => {
           </div>
           <div className="title">Your Phone:</div>
           <div className="titleValue">
-            <div>{UserDetails ? UserDetails.phone : "No Phone Number"}</div>
+            <div>
+              {UserDetails ? UserDetails.mobilenumber : "No Phone Number"}
+            </div>
           </div>
           <div className="title">Your Email:</div>
           <div className="titleValue">
-            <div>
-              {UserDetails ? UserDetails.emailaddress : "No Email Address"}
-            </div>
+            <div>{UserDetails ? UserDetails.email : "No Email Address"}</div>
           </div>
         </div>
         <div className="itemsMain">
@@ -85,7 +97,7 @@ const ConfirmationPage = () => {
               return (
                 <ConfirmationItem
                   product={element}
-                  quantity={Quantity[i]}
+                  quantity={element.count}
                   key={i}
                   index={i + 1}
                 />

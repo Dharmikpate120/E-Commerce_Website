@@ -1,10 +1,19 @@
 const express = require("express");
-const express1 = require("express")();
-const bodyParser = require("body-parser");
-
 const auth = require("./routes/auth");
-const userdata = require("./routes/userdata");
+// const userdata = require("./routes/userdata");
+const userdata_mongo = require("./routes/userdata_mongo");
 const cors = require("cors");
+const mongoose = require("mongoose");
+require("dotenv").config();
+
+const MONGODB_URI = process.env.MONGODB_URI;
+mongoose
+  .connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("Could not connect to MongoDB", err));
 
 const app = express();
 
@@ -22,6 +31,10 @@ app.use(express.json());
 // Authentication routes route
 app.use("/auth", auth);
 
-app.use("/userdata", userdata);
+//sql database
+// app.use("/userdata", userdata);
+
+//mongodb database
+app.use("/userdata", userdata_mongo);
 
 app.listen(5000, () => console.log("Server started on port 5000"));

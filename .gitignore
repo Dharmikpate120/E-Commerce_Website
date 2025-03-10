@@ -1,4 +1,7 @@
 backend/node_modules
+backend/products_images
+backend/profile_images
+backend/seller_logo
 backend/.env
 frontend/node_modules
 frontend/.env

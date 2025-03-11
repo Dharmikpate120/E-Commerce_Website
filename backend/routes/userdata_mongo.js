@@ -99,7 +99,7 @@ const productUpload = multer({
 router.post("/userdetails", fetchUser, async (req, res) => {
   profileImageUpload(req, res, async (err) => {
     if (err) {
-      return res.json({ error: "Invalid File Type!" });
+      return res.json({ err });
     }
     if (req.file == undefined) {
       return res.json({ error: "No file selected!" });

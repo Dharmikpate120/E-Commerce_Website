@@ -1,8 +1,9 @@
 import React, { useRef, useState } from "react";
 import { apiContext } from "../context/apiContext";
-
+import dotenv from "dotenv";
+dotenv.config();
 const ContextProvider = (props) => {
-  const host = "http://localhost:5000";
+  const host = process.env.HOST;
   const signinRef = useRef(null);
   const homeRef = useRef("a");
   const sellerRef = useRef(null);

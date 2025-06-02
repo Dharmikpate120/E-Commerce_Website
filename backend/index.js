@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const MONGODB_URI = process.env.MONGODB_URI;
+const allowedOrigins = [process.env.FRONTEND_ORIGIN];
 mongoose
   .connect(MONGODB_URI, {
     useNewUrlParser: true,
@@ -17,7 +18,19 @@ mongoose
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Explicitly list all allowed methods
+    maxAge: 86400, // Cache preflight responses for 24 hours
+  })
+);
 app.use("/images", express.static(__dirname + "/images"));
 app.use("/profile_images", express.static(__dirname + "/profile_images"));
 app.use("/seller_logo", express.static(__dirname + "/seller_logo"));
